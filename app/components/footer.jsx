@@ -7,7 +7,7 @@ export default function Footer() {
         <>
             <Flex w="full" h="12" alignItems="center" justify="end">
                 <Container>
-                    <Text textAlign="right">© POMIN, {currentYear}</Text>
+                    <Text fontSize="sm" textAlign="right">© POMIN, {currentYear}</Text>
                 </Container>
             </Flex>
         </>

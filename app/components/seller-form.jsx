@@ -156,7 +156,7 @@ export default function SellerForm() {
                     </SelectContent>
                 </SelectRoot>
 
-                <Text mt="6" fontSize="xs" color="blackAlpha.600">Brought to you by Haven Realty Commercial LLC. By submitting this form, you agree to receive emails, texts, and/or phone calls from POMIN.com. You may unsubscribe at any time. No purchase or sale is guaranteed. You agree to Agency Representation if interest in a property is stated. Our commission is 4.5% of total sales price (2.25% to Sellers and 2.25% to Buyers).</Text>
+                <Text mt="6" fontSize="xs" color="blackAlpha.600">Brought to you by Haven Realty Commercial LLC. By submitting this form, you agree to receive emails, texts, and/or phone calls from HavenPOMIN.com. You may unsubscribe at any time. No purchase or sale is guaranteed. You agree to Agency Representation if interest in a property is stated. Our commission is 4.5% of total sales price (2.25% to Sellers and 2.25% to Buyers).</Text>
             
                 <Button type="submit" loading={loading} loadingText="Submitting..." w="full" fontSize="xl" mt="6">Submit</Button>
 

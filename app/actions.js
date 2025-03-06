@@ -140,11 +140,16 @@ export async function BuyerSubmitForm(token, formData) {
 	// Verify reCAPTCHA Token
 	const captchaData = await verifyCaptchaToken(token);
 
+  console.log(captchaData)
+
 	if (!captchaData) {
+    console.log({ success: false, message: "reCAPTCHA Failed"})
 		return JSON.parse(JSON.stringify({ success: false, message: "reCAPTCHA Failed"}))
 	}
 
+
 	if (!captchaData.success || captchaData.score < 0.5) {
+    console.log({ success: false, message: "reCAPTCHA Failed", errors: !captchaData.success ? captchaData['error-codes'] : undefined})
 		return JSON.parse(JSON.stringify({ success: false, message: "reCAPTCHA Failed", errors: !captchaData.success ? captchaData['error-codes'] : undefined}))
 	}
 
@@ -165,14 +170,18 @@ export async function BuyerSubmitForm(token, formData) {
     const res = await fetch(process.env.BUYER_TO_CINC_AND_CC_ZAPIER_WEBHOOK, { method: "POST", body: JSON.stringify(result)});
 
     if (!res.ok) {
+      console.log({ success: false, message: "Unable to communicate with Zapier." })
       return JSON.parse(JSON.stringify({ success: false, message: "Unable to communicate with Zapier." }))
     }
   
     const ZapData = await res.json();
+    console.log(ZapData)
   } catch (err) {
+    console.log({ success: false, message: err})
     return JSON.parse(JSON.stringify({ success: false, message: err}))
   }
 
+  console.log({ success: true })
 	return JSON.parse(JSON.stringify({ success: true }));
 }
 

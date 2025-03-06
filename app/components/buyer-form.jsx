@@ -100,6 +100,8 @@ export default function BuyerForm() {
 
         const res = await BuyerSubmitForm(token, form);
 
+        console.log(res)
+
         if (res.success) {
             router.push("/thank-you");
         }

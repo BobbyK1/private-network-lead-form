@@ -32,9 +32,10 @@ export async function verifyCaptchaToken(token) {
     const res = await fetch(url, { method: "POST" });
 
     const captchaData = await res.json();
+    const sanitizedCaptchaData = JSON.parse(JSON.stringify(captchaData));
 
     if (!res.ok) return null;
 
-    return captchaData;
+    return sanitizedCaptchaData;
 }
 

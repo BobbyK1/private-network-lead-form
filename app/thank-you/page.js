@@ -1,9 +1,11 @@
 'use client'
 
 import { Box, Container, Heading, Text } from "@chakra-ui/react"
-import Lottie from "lottie-react"
+import dynamic from "next/dynamic";
 import { Roboto, Roboto_Condensed } from "next/font/google"
 import anim from "../components/anim/checkmark.json";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const roboto = Roboto({
   subsets: ["latin"],

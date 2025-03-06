@@ -134,18 +134,18 @@ const sellerSchema = z.object({
 
 export async function BuyerSubmitForm(token, formData) {
 	if (!token) {
-		return { success: false, message: "Token not found."}
+		return JSON.parse(JSON.stringify({ success: false, message: "Token not found."}))
 	}
 
 	// Verify reCAPTCHA Token
 	const captchaData = await verifyCaptchaToken(token);
 
 	if (!captchaData) {
-		return { success: false, message: "reCAPTCHA Failed"}
+		return JSON.parse(JSON.stringify({ success: false, message: "reCAPTCHA Failed"}))
 	}
 
 	if (!captchaData.success || captchaData.score < 0.5) {
-		return { success: false, message: "reCAPTCHA Failed", errors: !captchaData.success ? captchaData['error-codes'] : undefined}
+		return JSON.parse(JSON.stringify({ success: false, message: "reCAPTCHA Failed", errors: !captchaData.success ? captchaData['error-codes'] : undefined}))
 	}
 
 	const result = buyerSchema.parse({
@@ -165,31 +165,31 @@ export async function BuyerSubmitForm(token, formData) {
     const res = await fetch(process.env.BUYER_TO_CINC_AND_CC_ZAPIER_WEBHOOK, { method: "POST", body: JSON.stringify(result)});
 
     if (!res.ok) {
-      return { success: false, message: "Unable to communicate with Zapier." }
+      return JSON.parse(JSON.stringify({ success: false, message: "Unable to communicate with Zapier." }))
     }
   
     const ZapData = await res.json();
   } catch (err) {
-    return { success: false, message: err}
+    return JSON.parse(JSON.stringify({ success: false, message: err}))
   }
 
-	return { success: true };
+	return JSON.parse(JSON.stringify({ success: true }));
 }
 
 export async function SellerSubmitForm(token, formData) {
   if (!token) {
-    return { success: false, message: "Token not found." }
+    return JSON.parse(JSON.stringify({ success: false, message: "Token not found." }))
   }
 
   // Verify reCAPTCHA Token
   const captchaData = await verifyCaptchaToken(token);
 
   if (!captchaData) {
-    return { success: false, message: "reCAPTCHA Failed" }
+    return JSON.parse(JSON.stringify({ success: false, message: "reCAPTCHA Failed" }))
   }
 
   if (!captchaData.success || captchaData.score < 0.5) {
-    return { success: false, message: "reCAPTCHA Failed", errors: !captchaData.success ? captchaData['error-codes'] : undefined }
+    return JSON.parse(JSON.stringify({ success: false, message: "reCAPTCHA Failed", errors: !captchaData.success ? captchaData['error-codes'] : undefined }))
   }
 
   const result = sellerSchema.parse({
@@ -208,13 +208,13 @@ export async function SellerSubmitForm(token, formData) {
     const res = await fetch(process.env.SELLER_TO_CINC_AND_CC_ZAPIER_WEBHOOK, { method: "POST", body: JSON.stringify(result)});
 
     if (!res.ok) {
-      return { success: false, message: "Unable to communicate with Zapier." }
+      return JSON.parse(JSON.stringify({ success: false, message: "Unable to communicate with Zapier." }))
     }
   
     const ZapData = await res.json();
   } catch (err) {
-    return { success: false, message: err}
+    return JSON.parse(JSON.stringify({ success: false, message: err}))
   }
 
-  return { success: true }
+  return JSON.parse(JSON.stringify({ success: true }))
 }

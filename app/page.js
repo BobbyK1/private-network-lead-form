@@ -23,7 +23,6 @@ export default function Home({ searchParams }) {
 
 	const tenant = searchParams.tenant || 'default';
 
-	console.log(tenant)
 	return (
 		<Box className={roboto.className} >
 			<Container>

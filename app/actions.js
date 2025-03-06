@@ -50,7 +50,7 @@ const buyerSchema = z.object({
     phone_number: z
       .string()
       .min(1, "Phone Number is required")
-      .regex(/^\d{10,15}$/, "Phone Number must be between 10 to 15 digits"),
+      .regex(/^\(\d{3}\) \d{3}-\d{4}$/, "Phone Number must be between 10 to 15 digits"),
   
     num_of_units_desired: z
       .string({ invalid_type_error: "Number of Units Desired must be a number" }),
@@ -76,15 +76,12 @@ const buyerSchema = z.object({
       .min(1, "At least one financing term must be selected"),
 
     min_price: z
-      .string({ invalid_type_error: "Minimum Price must be a number" })
-      // Note: .min(0) on a string checks the string's length.
-      // If you plan to validate a number, consider coercing the value:
-      // z.preprocess(val => parseInt(val, 10), z.number().min(0, "Minimum Price cannot be negative"))
-      .min(1, "Minimum Price is required"),
+    .array(z.enum(validPrices))
+    .min(1, "Minimum Price is required"),
   
     max_price: z
-      .string({ invalid_type_error: "Maximum Price must be a number" })
-      .min(1, "Maximum Price is required"),
+    .array(z.enum(validPrices))
+    .min(1, "Maximum Price is required"),
 });
 
 const sellerSchema = z.object({
@@ -111,7 +108,7 @@ const sellerSchema = z.object({
   phone_number: z
     .string()
     .min(1, "Phone Number is required")
-    .regex(/^\d{10,15}$/, "Phone Number must be between 10 to 15 digits"),
+    .regex(/^\(\d{3}\) \d{3}-\d{4}$/, "Phone Number must be between 10 to 15 digits"),
 
   property_address: z
     .string()
@@ -121,8 +118,14 @@ const sellerSchema = z.object({
     .string({ invalid_type_error: "Number of Units Desired must be a number" }),
 
   list_price: z
-    .array(z.enum(validPrices))
-    .min(1, "Minimum Price is required"),
+    .string()
+    .refine(value => {
+      const cleanedValue = value.replace(/[^0-9.-]+/g, '')
+
+      return !isNaN(parseFloat(cleanedValue)) && isFinite(parseFloat(cleanedValue))
+    }, {
+      message: "Invalid currency format"
+    }),
   
   financing_terms: z
     .array(z.enum(["Cash", "Loan", "Seller Financing"]))
@@ -166,8 +169,6 @@ export async function BuyerSubmitForm(token, formData) {
     }
   
     const ZapData = await res.json();
-  
-    console.log(ZapData);
   } catch (err) {
     return { success: false, message: err}
   }
@@ -199,7 +200,7 @@ export async function SellerSubmitForm(token, formData) {
 		phone_number: formData.get("phone_number"),
     property_address: formData.get("property_address"),
     num_of_units_on_property: formData.get("num_of_units_on_property"),
-    list_price: formData.getAll("list_price"),
+    list_price: formData.get("list_price"),
 		financing_terms: formData.getAll("financing_terms"),
   })
 
@@ -211,8 +212,6 @@ export async function SellerSubmitForm(token, formData) {
     }
   
     const ZapData = await res.json();
-  
-    console.log(ZapData);
   } catch (err) {
     return { success: false, message: err}
   }

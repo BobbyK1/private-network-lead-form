@@ -4,10 +4,11 @@ import { Button, createListCollection, Input, SimpleGrid, Text } from "@chakra-u
 import { SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText } from "./ui/select";
 import { Roboto } from "next/font/google";
 import { BuyerSubmitForm } from "../actions";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { getCaptchaToken } from "../utils/captcha";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { PatternFormat } from "react-number-format";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -104,6 +105,7 @@ export default function BuyerForm() {
         }
 
         if (!res.success) {
+            setLoading(false);
             console.log(res.message);
         }
 
@@ -126,7 +128,7 @@ export default function BuyerForm() {
 
                 <SimpleGrid columns={[1, 1, 2]} gap="5" mt="4">
                     <Input type="text" outline="none" name="email" placeholder="Email *" bgColor="white" size="lg" required />
-                    <Input type="text" outline="none" name="phone_number" placeholder="Phone Number *" bgColor="white" size="lg" required />
+                    <PatternFormat customInput={Input} format="(###) ###-####" type="text" outline="none" name="phone_number" placeholder="Phone Number *" bgColor="white" size="lg" required />
                 </SimpleGrid>
 
                 <Input mt="4" type="number" outline="none" name="num_of_units_desired" placeholder="Number of Units Desired *" bgColor="white" size="lg" required />

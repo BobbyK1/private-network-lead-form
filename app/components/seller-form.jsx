@@ -8,6 +8,7 @@ import { useState } from "react";
 import { getCaptchaToken } from "../utils/captcha";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { NumericFormat, PatternFormat } from "react-number-format";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -58,31 +59,6 @@ const finances = createListCollection({
 	]
 })
 
-const prices = createListCollection({
-    items: [
-        { label: "$100,000", value: "$100,000" },
-        { label: "$200,000", value: "$200,000" },
-        { label: "$300,000", value: "$300,000" },
-        { label: "$400,000", value: "$400,000" },
-        { label: "$500,000", value: "$500,000" },
-        { label: "$600,000", value: "$600,000" },
-        { label: "$700,000", value: "$700,000" },
-        { label: "$800,000", value: "$800,000" },
-        { label: "$900,000", value: "$900,000" },
-        { label: "$1,000,000", value: "$1,000,000" },
-        { label: "$1,100,000", value: "$1,100,000" },
-        { label: "$1,200,000", value: "$1,200,000" },
-        { label: "$1,300,000", value: "$1,300,000" },
-        { label: "$1,400,000", value: "$1,400,000" },
-        { label: "$1,500,000", value: "$1,500,000" },
-        { label: "$1,600,000", value: "$1,600,000" },
-        { label: "$1,700,000", value: "$1,700,000" },
-        { label: "$1,800,000", value: "$1,800,000" },
-        { label: "$1,900,000", value: "$1,900,000" },
-        { label: "$2,000,000+", value: "$2,000,000+" }
-    ]
-});
-
 
 export default function SellerForm() {
     const [loading, setLoading] = useState(false);
@@ -121,27 +97,14 @@ export default function SellerForm() {
 
                 <SimpleGrid columns={[1, 1, 2]} gap="5" mt="4">
                     <Input type="text" outline="none" name="email" placeholder="Email *" bgColor="white" size="lg" required />
-                    <Input type="tel" outline="none" name="phone_number" placeholder="Phone Number *" bgColor="white" size="lg" required />
+                    <PatternFormat customInput={Input} format="(###) ###-####" type="text" outline="none" name="phone_number" placeholder="Phone Number *" bgColor="white" size="lg" required />
                 </SimpleGrid>
 
                 <Input mt="4" type="text" outline="none" name="property_address" placeholder="Property Address *" bgColor="white" size="lg" required />
 
                 <Input mt="4" type="number" outline="none" name="num_of_units_on_property" placeholder="Number of Units On Property *" bgColor="white" size="lg" required />
-
-                <SimpleGrid columns={[1, 1]} gap="5" mt="4">
-                    <SelectRoot required name="list_price" bgColor="white" size="lg" collection={prices}>
-                        <SelectTrigger>
-                            <SelectValueText placeholder="List Price *"  />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {prices.items.map(price => (
-                                <SelectItem item={price} key={price.value}>
-                                    {price.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </SelectRoot>
-                </SimpleGrid>
+                
+                <NumericFormat customInput={Input} thousandSeparator="," prefix="$" allowNegative={false} decimalScale={0} mt="4" outline="none" name="list_price" placeholder="List Price *" bgColor="white" size="lg" required />
 
                 <SelectRoot required name="financing_terms" multiple bgColor="white" mt="4" size="lg" collection={finances}>
                     <SelectTrigger clearable>
